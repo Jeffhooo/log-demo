@@ -37,7 +37,7 @@ public class LogUtil {
 				FileAppender<ILoggingEvent> appender = new FileAppender<>();
 				appender.setName(discriminatingValue);
 				appender.setContext(context);
-				appender.setFile(discriminatingValue + ".log");
+				appender.setFile("log/" + discriminatingValue + ".log");
 				appender.setAppend(true);
 				if (appender.isStarted()) {
 					appender.stop();

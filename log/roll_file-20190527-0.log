@@ -1,0 +1,9 @@
+15:42:42.950 [main] INFO  jeff.demo.LogDemo - main: I am fine.
+15:42:42.952 [main] WARN  jeff.demo.LogDemo - main: I love programming.
+15:42:42.950 [Thread-1] INFO  jeff.demo.LogDemo - thread-0: I am fine.
+15:42:42.951 [Thread-2] INFO  jeff.demo.LogDemo - thread-1: I am fine.
+15:42:42.953 [Thread-1] WARN  jeff.demo.LogDemo - thread-0: I love programming.
+15:42:42.952 [main] ERROR jeff.demo.LogDemo - main: I am programming.
+15:42:42.954 [Thread-2] WARN  jeff.demo.LogDemo - thread-1: I love programming.
+15:42:42.954 [Thread-1] ERROR jeff.demo.LogDemo - thread-0: I am programming.
+15:42:42.955 [Thread-2] ERROR jeff.demo.LogDemo - thread-1: I am programming.
