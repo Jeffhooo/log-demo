@@ -3,7 +3,7 @@
 
     <property name="log.dir" value="log"/>
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <charset>utf-8</charset>
             <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
@@ -12,10 +12,14 @@
 
     <appender name="ROLL-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <append>true</append>
+
+        <filter class="jeff.demo.MainFilter" />
+
         <encoder>
             <charset>utf-8</charset>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
+
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${log.dir}/roll_file-%d{yyyyMMdd}-%i.log.zip</fileNamePattern>
             <maxHistory>2</maxHistory>
@@ -34,12 +38,12 @@
     </appender>
 
     <logger name="jeff.demo" level="INFO">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="CONSOLE" />
         <appender-ref ref="ASYNC-ROLL-FILE" />
     </logger>
 
     <root level="DEBUG">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="CONSOLE" />
     </root>
 
 </configuration>

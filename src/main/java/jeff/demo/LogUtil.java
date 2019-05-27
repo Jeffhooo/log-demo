@@ -62,8 +62,7 @@ public class LogUtil {
 		logger.addAppender(sa);
 	}
 
-	public static void stopFileAppenderInSiftingAppender(String key,
-			org.slf4j.Logger logger) {
+	public static void stopFileAppenderInSiftingAppender(String key, org.slf4j.Logger logger) {
 		if (!isLogbackInstance()) {
 			return;
 		}
