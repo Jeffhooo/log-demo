@@ -17,14 +17,19 @@ public class LogUtil {
 	public static String DISCRIMINATOR_KEY = "logFileName";
 
 	public synchronized static void addSiftingAppender(org.slf4j.Logger log) {
+		// check whether this logger is logback logger
 		if (!isLogbackInstance()) {
 			return;
 		}
+
+		// check whether this logger have Sift Appender
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 		Logger logger = lc.getLogger(log.getName());
 		if (logger.getAppender(SIFTING_APPENDER_NAME) != null) {
 			return;
 		}
+
+		// Add new discriminator to Sift Appender
 		SiftingAppender sa = new SiftingAppender();
 		sa.setName(SIFTING_APPENDER_NAME);
 		sa.setContext(lc);
@@ -33,6 +38,8 @@ public class LogUtil {
 		discriminator.setDefaultValue("unknown");
 		discriminator.start();
 		sa.setDiscriminator(discriminator);
+
+		// Appender Factory will create a new File Appender for this discriminator
 		sa.setAppenderFactory((Context context, String discriminatingValue) -> {
 				FileAppender<ILoggingEvent> appender = new FileAppender<>();
 				appender.setName(discriminatingValue);
@@ -55,6 +62,8 @@ public class LogUtil {
 				appender.start();
 				return appender;
 		});
+
+		// Start this Sift Appender
 		if (sa.isStarted()) {
 			sa.stop();
 		}
@@ -63,24 +72,24 @@ public class LogUtil {
 	}
 
 	public static void stopFileAppenderInSiftingAppender(String key, org.slf4j.Logger logger) {
+		// check whether this logger is logback logger
 		if (!isLogbackInstance()) {
 			return;
 		}
+
+		// Get File Appender and stop
 		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 		Logger log = lc.getLogger(logger.getName());
-		SiftingAppender sa = (SiftingAppender) log
-				.getAppender(SIFTING_APPENDER_NAME);
+		SiftingAppender sa = (SiftingAppender) log.getAppender(SIFTING_APPENDER_NAME);
 		if (sa == null) {
 			return;
 		}
-		FileAppender<?> fa = (FileAppender<?>) sa.getAppenderTracker()
-				.find(key);
+		FileAppender<?> fa = (FileAppender<?>) sa.getAppenderTracker().find(key);
 		if (fa != null) {
 			fa.getEncoder().stop();
 			fa.stop();
 		}
-		sa.getAppenderTracker().removeStaleComponents(
-				System.currentTimeMillis());
+		sa.getAppenderTracker().removeStaleComponents(System.currentTimeMillis());
 	}
 
 	public static boolean isLogbackInstance() {

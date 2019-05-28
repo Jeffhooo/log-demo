@@ -1,48 +1,66 @@
 package jeff.demo;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 public class LogDemo {
 
-    private static final Logger logger = LoggerFactory.getLogger(LogDemo.class);
+    private static final Logger log = LoggerFactory.getLogger(LogDemo.class.getName());
 
     public static void main(String[] args) {
 
-        new Thread(() -> {
-            LogUtil.addSiftingAppender(logger);
-            MDC.put(LogUtil.DISCRIMINATOR_KEY, "thread-0");
-            logger.trace("thread-0: Hello World!");
-            logger.debug("thread-0: How are you today?");
-            logger.info("thread-0: I am fine.");
-            logger.warn("thread-0: I love programming.");
-            logger.error("thread-0: I am programming.");
-            MDC.remove(LogUtil.DISCRIMINATOR_KEY);
-            LogUtil.stopFileAppenderInSiftingAppender("thread-0", logger);
-        }).start();
+        // add a Sift Appender to the logger
+        LogUtil.addSiftingAppender(log);
 
         new Thread(() -> {
-            LogUtil.addSiftingAppender(logger);
+            // add a MDC key value pair
             MDC.put(LogUtil.DISCRIMINATOR_KEY, "thread-1");
-            logger.trace("thread-1: Hello World!");
-            logger.debug("thread-1: How are you today?");
-            logger.info("thread-1: I am fine.");
-            logger.warn("thread-1: I love programming.");
-            logger.error("thread-1: I am programming.");
+
+            // start log
+            log.trace("thread-1: Hello World!");
+            log.debug("thread-1: How are you today?");
+            log.info("thread-1: I am fine.");
+            log.warn("thread-1: I love programming.");
+            log.error("thread-1: I am programming.");
+
+            // remove MDC key value and stop file appender
             MDC.remove(LogUtil.DISCRIMINATOR_KEY);
-            LogUtil.stopFileAppenderInSiftingAppender("thread-1", logger);
+            LogUtil.stopFileAppenderInSiftingAppender("thread-1", log);
         }).start();
 
-        LogUtil.addSiftingAppender(logger);
+        new Thread(() -> {
+            // add a MDC key value pair
+            LogUtil.addSiftingAppender(log);
+            MDC.put(LogUtil.DISCRIMINATOR_KEY, "thread-2");
+
+            // start log
+            log.trace("thread-2: Hello World!");
+            log.debug("thread-2: How are you today?");
+            log.info("thread-2: I am fine.");
+            log.warn("thread-2: I love programming.");
+            log.error("thread-2: I am programming.");
+
+            // remove MDC key value and stop file appender
+            MDC.remove(LogUtil.DISCRIMINATOR_KEY);
+            LogUtil.stopFileAppenderInSiftingAppender("thread-2", log);
+        }).start();
+
+
+        // add a MDC key value pair
         MDC.put(LogUtil.DISCRIMINATOR_KEY, "main");
-        logger.trace("main: Hello World!");
-        logger.debug("main: How are you today?");
-        logger.info("main: I am fine.");
-        logger.warn("main: I love programming.");
-        logger.error("main: I am programming.");
+
+        // start log
+        log.trace("main: Hello World!");
+        log.debug("main: How are you today?");
+        log.info("main: I am fine.");
+        log.warn("main: I love programming.");
+        log.error("main: I am programming.");
+
+        // remove MDC key value and stop file appender
         MDC.remove(LogUtil.DISCRIMINATOR_KEY);
-        LogUtil.stopFileAppenderInSiftingAppender("main", logger);
+        LogUtil.stopFileAppenderInSiftingAppender("main", log);
 
     }
 }
